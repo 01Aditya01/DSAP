@@ -14,7 +14,7 @@ string removeZeroes(string a){
     return a.substr(i);
 }
 
-string add(string& a, string& b){
+string add(string a, string b){
     int n=a.length(), m=b.length(), r=max(n,m)+1;
     int i=n-1, j=m-1, k=r-1;
     string res(r,'0');
@@ -124,6 +124,7 @@ bool compare(string a, string b){
 }
 
 string division(string a, string b){
+    time_t start = time(&start);
     if(a==b) return "1";
     if(compare(a,b)) {
         return "0";}
@@ -144,8 +145,11 @@ string division(string a, string b){
             high=subtract(mid,one);
         }
     }
+    time_t end = time(&end);
+    cout << endl << end-start << " seconds" <<endl;
     return res;
 }
+
 
 int priority(char c){
     if(c=='*' || c=='/') return 2;
@@ -231,6 +235,40 @@ string evaluate(string* exp){
     return stack[0];
 }
 
+bool modulo2(string& a){
+    int n=a.length();
+    if((a[n-1]-'0')%2) return true;
+    return false;
+}
+
+string exponent(string& x, long long y){
+    string cur=x,res="1";
+    while(y>0){
+        if(y&1) res=multiply(res,cur);
+        cur=multiply(cur,cur);
+        y>>=1;
+    }
+    return res;
+}
+
+string modulo(string a, string b){
+    string q=division(a,b);
+    return subtract(a,multiply(q,b));
+}
+string gcd(string a, string b){
+    if(b=="0") return a;
+    return gcd(b, modulo(a,b));
+}
+
+string factorial(string n){
+    string i="2",cur="1",end=add(n,"1");
+    while(i!=end){
+        cur=multiply(cur,i);
+        i=add(i,"1");
+    }
+    return cur;
+}
+
 int main(){
     int op_type;
     cin>>op_type;
@@ -242,5 +280,30 @@ int main(){
         cout<<ans<<endl;
         delete[] pfix;
     }
+
+    else if(op_type==2){
+        string x;
+        long long y;
+        cin>>x>>y;
+        string ans = exponent(x,y);
+        cout<<ans<<endl;       
+
+    }
+
+    else if(op_type==3){
+        string x,y;
+        cin>>x>>y;
+        string ans= gcd(x,y);
+        cout<<ans<<endl;
+    }
+
+    else if(op_type==4){
+        string x;
+        cin>>x;
+        string ans= factorial(x);
+        cout<<ans<<endl;
+    }
+
+
     return 0;
 }
